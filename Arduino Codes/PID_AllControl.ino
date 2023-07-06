@@ -10,7 +10,7 @@ const int m2 = 13;
 const int pwm2 = 11;
 const int br2 = 8;
 
-char ch = 'd';
+char ch = ' ';
 
 const float spd_target = 3.0;
 float spd_current = 0.0;
@@ -25,8 +25,8 @@ int counter = 0;
 
 //pid variables
 #define kp 10
-#define ki 15
-#define kd 1
+#define ki 18
+#define kd 1.0
 
 float T_curr, T_prev = 0;
 float T1_curr, T1_prev = 0;
@@ -65,18 +65,20 @@ void reverse(float power1, float power2)
 void left(float power1, float power2)
 {
   //takes left till given angle then goes straight at that angle
-//  float ang = (5.0 * PI)/180.0;
-//  float t = ang/spd_target;
-//  float st_time = millis();
-//  
-//  while((millis()-st_time)<=(t*1000))
-//  {
+  float ang = (45.0 * PI)/180.0;
+  float t = ang/spd_target;
+  float st_time = millis();
+  
+  while((millis()-st_time)<=(t*1000))
+  {
     analogWrite(pwm1, power1);
     analogWrite(pwm2, power2);
     
     digitalWrite(m1, LOW);
     digitalWrite(m2, LOW);
-//  }
+  }
+
+  ch = 'w';
   
 //  digitalWrite(m1, HIGH);
 //  digitalWrite(m2, LOW);
@@ -84,18 +86,20 @@ void left(float power1, float power2)
 
 void right(float power1, float power2)
 {
-//  float ang = 5.0 * PI/180.0;
-//  float t = ang/spd_target;
-//  float st_time = millis();
-//
-//  while((millis()-st_time)<=(t*1000))
-//  {
+  float ang = (45.0 * PI)/180.0;
+  float t = ang/spd_target;
+  float st_time = millis();
+
+  while((millis()-st_time)<=(t*1000))
+  {
     digitalWrite(m1, HIGH);
     digitalWrite(m2, HIGH);
     
     analogWrite(pwm1, power1);
     analogWrite(pwm2, power2);
-//  }
+  }
+
+  ch = 'w';
   
 //  digitalWrite(m1, HIGH);
 //  digitalWrite(m2, LOW);
@@ -115,9 +119,11 @@ void u_turn(float power1, float power2)
     analogWrite(pwm1, power1);
     analogWrite(pwm2, power2);
   }
+
+  ch = 'w';
   
-  digitalWrite(m1, HIGH);
-  digitalWrite(m2, LOW);
+//  digitalWrite(m1, HIGH);
+//  digitalWrite(m2, LOW);
 }
 
 void brake()
