@@ -7,10 +7,10 @@
 #include <geometry_msgs/Twist.h>
 
 //Creating a ROS node
-ros::NodeHandle  nh;
+ros::NodeHandle_<ArduinoHardware, 1, 1, 552, 552> nh;;
 
 //Creating subscriber and publisher nodes
-std_msgs::Float32 target;
+std_msgs::Float32 msg;
 //std_msgs::Int16 count1;
 //std_msgs::Int16 count2;
 //geometry_msgs::Twist msg;
@@ -32,7 +32,7 @@ int count1 = 0;
 int count2 = 0;
 
 //Choice character
-char ch = ' ';
+char ch = 'w';
 
 //Speed variables
 float spd_target = 1.0;
@@ -73,9 +73,9 @@ float move1;
 float move2;
 
 //Callback function for subscriber to receive target velocity in rad/s
-void motorVel( const std_msgs::Float32& target)
+void motorVel( const std_msgs::Float32& msg)
 {
-  spd_target = target.data;
+  spd_target = msg.data;
 }
 
 //Callback function for subscriber to receive target velocity in rad/s
@@ -113,7 +113,7 @@ void motorVel( const std_msgs::Float32& target)
 ros::Subscriber<std_msgs::Float32> sub1("runmotor", &motorVel);
 
 //ROS subsriber receiving target velocity of Char type
-//ros::Subscriber<std_msgs::Char> sub2("controlmotor", &motorCtrl);
+//ros::Subscribertd_msgs::Char> sub2("controlmotor", &motorCtrl);
 
 //Function to make the bot run straight
 void run_straight(float power1, float power2)
@@ -346,7 +346,9 @@ void setup()
 void loop()
 {
   nh.spinOnce();
-  
+  Serial.println(spd_target);
+//  Serial.println(msg.data);
+
   //Left - Motor 1
   //Speed calculation
   
@@ -387,7 +389,7 @@ void loop()
     t2_prev=t2;
   }
 
-  float effort2 = PIDCalc2(spd_current2, spd_target);
+  float effort2 = PIDCalc2(spd_current2,spd_target);
   
   Serial.print("Speed current 2 = ");
   Serial.println(spd_current2);
